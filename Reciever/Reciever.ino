@@ -3,9 +3,12 @@ SimpleReceive
 This sketch displays text strings received using VirtualWire
 Connect the Receiver data pin to Arduino pin 11
 */
+#define whiteLed 3
+#define greenLed 4
 #include <VirtualWire.h>
 #include <NewPing.h>
-
+int loopTime = 0;
+int detectionConstant = 3000;
 int timer = 0;
 int c = 0;
 bool r = false;
@@ -21,8 +24,8 @@ Serial.println("Device is ready");
 
 vw_setup(2000); // Bits per sec
 vw_rx_start(); // Start the receiver
-pinMode(3,OUTPUT);
-pinMode(4,OUTPUT);
+pinMode(whiteLed,OUTPUT);
+pinMode(greenLed,OUTPUT);
 
 }
 
@@ -47,28 +50,39 @@ Serial.print("Received: ");
 c=message[0];
 Serial.println(c);
 }
+
+
 if (c == 50)
 {
   timer = millis();
-  c=0;
-  digitalWrite(3,HIGH);
-  if ((millis()-timer)>1000)
+  loopTime = 0;
+  digitalWrite(whiteLed,HIGH);
+  while (loopTime<detectionConstant)
   {
-    digitalWrite(3,LOW);
+    if (sonar.ping_cm()<10)
+    {
+      digitalWrite(greenLed,HIGH);
+      delay(1000);
+      digitalWrite(whiteLed,LOW);
+      digitalWrite(greenLed,LOW);
+    }
+    else
+    loopTime = (millis()-timer);
+   
+   
   }
-  if ((sonar.ping_cm()<10)and (sonar.ping_cm()>0))
+  if (loopTime>detectionConstant)
+  {
+    digitalWrite(whiteLed,LOW);
+    c=0;
+  }
+  c=0;
+}
 
-{
-  digitalWrite(4,HIGH);
-  delay(1000);
-  digitalWrite(4,LOW);
-}
-}
 else
 { 
 c=0;
-delay(1000);
-digitalWrite(3,LOW);
+
 }
 
 
