@@ -59,7 +59,7 @@ if (c == 50)
   digitalWrite(whiteLed,HIGH);
   while (loopTime<detectionConstant)
   {
-    if (sonar.ping_cm()<10)
+    if ((sonar.ping_cm()<10)and (sonar.ping_cm()>0))
     {
       digitalWrite(greenLed,HIGH);
       delay(1000);
