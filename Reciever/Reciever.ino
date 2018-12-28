@@ -7,10 +7,11 @@
 #define greenLed 4
 #include <VirtualWire.h>
 #include <NewPing.h>
+int id = 49;
 int loopTime = 0;
 int detectionConstant = 3000;
 int timer = 0;
-int c = 0;
+char c = 0;
 bool shotTrig = false;
 bool r = false;
 byte message[VW_MAX_MESSAGE_LEN]; // a buffer to store the incoming messages
@@ -53,7 +54,7 @@ void loop()
   }
 
 
-  if (c == 50)
+  if (c == id)
   {
     timer = millis();
     loopTime = 0;
